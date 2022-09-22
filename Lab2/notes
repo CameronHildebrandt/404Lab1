@@ -1,8 +1,0 @@
-from http import client
-
-'''
-this will be an intermediary between the google server and the client
-
-google.com <-----> (1 socket) proxy server (1 socket) <------> client
-                              also a client
-'''
