@@ -1,3 +1,5 @@
+from multiprocessing import Process
+
 #!/usr/bin/env python3
 import socket
 import time
@@ -22,12 +24,18 @@ def main():
         while True:
             conn, addr = s.accept()
             print("Connected by", addr)
+
+            p = Process(target='echo_handler', args=(conn, addr))
+            p.daemon = True
+            p.start()
             
-            #recieve data, wait a bit, then send it back
-            full_data = conn.recv(BUFFER_SIZE)
-            time.sleep(0.5)
-            conn.sendall(full_data)
-            conn.close()
+
+def echo_handler(conn, addr):
+    #receive data, wait a bit, then send it back
+    full_data = conn.recv(BUFFER_SIZE)
+    time.sleep(0.5)
+    conn.sendall(full_data)
+    conn.close()
 
 if __name__ == "__main__":
     main()
